@@ -1,7 +1,6 @@
 # NTHU I2P2 - Mini Project 1
 
-#### Goal
-Implemet a simple calculator for integer arithmetics
+#### Goal: Implemet a simple calculator for integer arithmetic
 
 ```
   >> x = 3
