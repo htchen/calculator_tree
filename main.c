@@ -33,7 +33,7 @@ int sbcount = 0;
 
 typedef struct _Node {
 	char lexeme[MAXLEN];
-	TokenSet data;
+	TokenSet token;
 	int val;
 	struct _Node *left, *right;
 } BTNode;
@@ -48,19 +48,19 @@ int setval(char*, int);
 typedef enum {MISPAREN, NOTNUMID, NOTFOUND, RUNOUT, NAN} ErrorType;
 void error(ErrorType errorNum);
 
-/* create a node without any child.*/
+/* create a node without any child */
 BTNode* makeNode(TokenSet tok, const char *lexe)
 {
 	BTNode *node = (BTNode*) malloc(sizeof(BTNode));
 	strcpy(node->lexeme, lexe);
-	node->data = tok;
+	node->token= tok;
 	node->val = 0;
 	node->left = NULL;
 	node->right = NULL;
 	return node;
 }
 
-/* clean a tree.*/
+/* clean a tree */
 void freeTree(BTNode *root)
 {
 	if (root!=NULL) {
@@ -70,7 +70,7 @@ void freeTree(BTNode *root)
 	}
 }
 
-/* print a tree by pre-order. */
+/* print a tree by pre-order */
 void printPrefix(BTNode *root)
 {
 	if (root != NULL) {
@@ -80,11 +80,13 @@ void printPrefix(BTNode *root)
 	}
 }
 
+/* traverse the syntax tree by pre-order
+   and evaluate the underlying expression */
 int evaluateTree(BTNode *root)
 {
 	int retval = 0, lv, rv;
 	if (root != NULL) {
-		switch (root->data) {
+		switch (root->token) {
 		case ID:
 		case INT:
 			retval = root->val;
@@ -149,7 +151,7 @@ int getval(void)
 
 int setval(char *str, int val)
 {
-	int i, retval;
+	int i, retval = 0;
 	i = 0;
 	while (i<sbcount) {
 		if (strcmp(str, table[i].name)==0) {
@@ -168,9 +170,8 @@ int setval(char *str, int val)
 BTNode* expr(void)
 {
 	BTNode *retp, *left;
-	//int retval;
 	retp = left = term();
-	while (match(ADDSUB)) {
+	while (match(ADDSUB)) { // tail recursion => while
 		retp = makeNode(ADDSUB, getLexeme());
 		advance();
 		retp->right = term();
@@ -186,8 +187,7 @@ BTNode* term(void)
 {
 	BTNode *retp, *left;
 	retp = left = factor();
-
-	while (match(MULDIV)) {
+	while (match(MULDIV)) { // tail recursion => while
 		retp = makeNode(MULDIV, getLexeme());
 		advance();
 		retp->right = factor();
