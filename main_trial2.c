@@ -48,7 +48,7 @@ void expr(void)
 {
     term();
     while (match(ADDSUB)){
-        printf("ADDSUB: %s\n", lexeme);
+        printf("ADDSUB: %s\n", getLexeme());
         advance();
         term();
     }
@@ -56,7 +56,7 @@ void expr(void)
 void term(void) {
     factor();
     while (match(MULDIV)) {
-        printf("MULDIV: %s\n", lexeme);
+        printf("MULDIV: %s\n", getLexeme());
         advance();
         factor();
     }
@@ -64,32 +64,32 @@ void term(void) {
 void factor(void)
 {
     if (match(INT)) {
-        printf("INT: %s\n", lexeme);
+        printf("INT: %s\n", getLexeme());
         advance();
     } else if (match(ADDSUB)) {
-        printf("ADDSUB: %s\n", lexeme);
+        printf("ADDSUB: %s\n", getLexeme());
         advance();
         if (match(INT)) {
-            printf("INT: %s\n", lexeme);
+            printf("INT: %s\n", getLexeme());
             advance();
         } else if (match(ID)) {
-            printf("ID: %s\n", lexeme);
+            printf("ID: %s\n", getLexeme());
             advance();
         }
     } else if (match(ID)) {
-        printf("ID: %s\n", lexeme);
+        printf("ID: %s\n", getLexeme());
         advance();
         if (match(ASSIGN)) {
-            printf("ASSIGN: %s\n", lexeme);
+            printf("ASSIGN: %s\n", getLexeme());
             advance();
             expr();
         }
     } else if (match(LPAREN)) {
-        printf("LPAREN: %s\n", lexeme);
+        printf("LPAREN: %s\n", getLexeme());
         advance();
         expr();
         if (match(RPAREN)) {
-            printf("RPAREN: %s\n", lexeme);
+            printf("RPAREN: %s\n", getLexeme());
             advance();
         } else {
             printf("Parenthesis mismatched\n");
