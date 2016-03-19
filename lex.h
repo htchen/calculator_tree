@@ -3,9 +3,8 @@
 #define MAXLEN 256
 typedef enum {UNKNOWN, END, INT, ID, ADDSUB, MULDIV, ASSIGN,
 LPAREN, RPAREN} TokenSet;
-char lexeme[MAXLEN];
-
 
 extern int match (TokenSet token);
 extern void advance(void);
+extern char* getLexeme(void);
 #endif // __LEX__

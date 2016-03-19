@@ -4,6 +4,7 @@
 #include "lex.h"
 static TokenSet getToken(void);
 static TokenSet lookahead = UNKNOWN;
+static char lexeme[MAXLEN];
 
 TokenSet getToken(void)
 {
@@ -72,3 +73,7 @@ int match(TokenSet token)
     return token == lookahead;
 }
 
+char* getLexeme(void)
+{
+    return lexeme;
+}

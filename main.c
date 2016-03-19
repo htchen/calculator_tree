@@ -6,13 +6,11 @@
 #include "lex.h"
 /*
 Something like Python
-
 >> y = 2
 >> z = 2
 >> x = 3*y + 4/(2*z)
 
 */
-
 
 /*
 the only type: integer
@@ -24,8 +22,6 @@ everything is an expression
   term_tail := MULDIV factor term_tail | NIL
   factor      := INT | ADDSUB INT | ADDSUB ID | ID ASSIGN expr | ID | LPAREN expr RPAREN
 */
-
-
 
 #define TBLSIZE 65535
 typedef struct {
@@ -116,11 +112,11 @@ int getval(void)
     int i, retval, found;
 
     if (match(INT)) {
-        retval = atoi(lexeme);
+        retval = atoi(getLexeme());
     } else if (match(ID)) {
         i = 0; found = 0; retval = 0;
         while (i<sbcount && !found) {
-            if (strcmp(lexeme, table[i].name)==0) {
+            if (strcmp(getLexeme(), table[i].name)==0) {
                 retval = table[i].val;
                 found = 1;
                 break;
@@ -130,7 +126,7 @@ int getval(void)
         }
         if (!found) {
             if (sbcount < TBLSIZE) {
-                strcpy(table[sbcount].name, lexeme);
+                strcpy(table[sbcount].name, getLexeme());
                 table[sbcount].val = 0;
                 sbcount++;
             } else {
@@ -167,7 +163,7 @@ BTNode* expr(void)
     //int retval;
     retp = left = term();
     while (match(ADDSUB)) {
-        retp = makeNode(ADDSUB, lexeme);
+        retp = makeNode(ADDSUB, getLexeme());
         advance();
         retp->right = term();
         retp->left = left;
@@ -184,7 +180,7 @@ BTNode* term(void)
     retp = left = factor();
 
     while (match(MULDIV)) {
-        retp = makeNode(MULDIV, lexeme);
+        retp = makeNode(MULDIV, getLexeme());
         advance();
         retp->right = factor();
         retp->left = left;
@@ -199,16 +195,16 @@ BTNode* factor(void)
     char tmpstr[MAXLEN];
 
     if (match(INT)) {
-        retp =  makeNode(INT, lexeme);
+        retp =  makeNode(INT, getLexeme());
         retp->val = getval();
         advance();
     } else if (match(ID)) {
-        BTNode* left = makeNode(ID, lexeme);
+        BTNode* left = makeNode(ID, getLexeme());
         left->val = getval();
-        strcpy(tmpstr, lexeme);
+        strcpy(tmpstr, getLexeme());
         advance();
         if (match(ASSIGN)) {
-            retp = makeNode(ASSIGN, lexeme);
+            retp = makeNode(ASSIGN, getLexeme());
             advance();
             retp->right = expr();
             retp->left = left;
@@ -216,14 +212,14 @@ BTNode* factor(void)
             retp = left;
         }
     } else if (match(ADDSUB)) {
-        strcpy(tmpstr, lexeme);
+        strcpy(tmpstr, getLexeme());
         advance();
         if (match(ID) || match(INT)) {
             retp = makeNode(ADDSUB, tmpstr);
             if (match(ID))
-                retp->right = makeNode(ID, lexeme);
+                retp->right = makeNode(ID, getLexeme());
             else
-                retp->right = makeNode(INT, lexeme);
+                retp->right = makeNode(INT, getLexeme());
             retp->right->val = getval();
             retp->left = makeNode(INT, "0");
             retp->left->val = 0;
@@ -255,7 +251,7 @@ void error(ErrorType errorNum)
         fprintf(stderr, "Number or identifier expected\n");
         break;
     case NOTFOUND:
-        fprintf(stderr, "%s not defined\n", lexeme);
+        fprintf(stderr, "%s not defined\n", getLexeme());
         break;
     case RUNOUT:
         fprintf(stderr, "Out of memory\n");
@@ -299,7 +295,7 @@ int main(void)
     TokenSet tok;
     tok = getToken();
     while (tok != END) {
-        printf("%d: %s\n", tok, lexeme);
+        printf("%d: %s\n", tok, getLexeme());
         tok = getToken();
     }
     return 0;
