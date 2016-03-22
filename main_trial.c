@@ -57,10 +57,11 @@ void expr_tail(void)
         term();
         expr_tail();
     } else {
-        // Nil
+        // NIL
     }
 }
-void term(void) {
+void term(void) 
+{
     factor();
     term_tail();
 }
@@ -72,7 +73,7 @@ void term_tail(void)
         factor();
         term_tail();
     } else {
-        // Nil
+        // NIL
     }
 }
 void factor(void)

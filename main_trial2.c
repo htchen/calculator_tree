@@ -28,9 +28,7 @@ everything is an expression
 
 void statement(void);
 void expr(void);
-void expr_tail(void);
 void term(void);
-void term_tail(void);
 void factor(void);
 
 void statement(void)
