@@ -1,4 +1,4 @@
-# NTHU I2P2 - Mini Project 1
+# NTHU I2P2 - Calculator
 
 #### Goal: To implemet a simple calculator for integer arithmetic
 
